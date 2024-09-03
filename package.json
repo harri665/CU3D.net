@@ -3,7 +3,6 @@
   "version": "1.4.0",
   "description": "A MERN Stack Template created to easily get started with developing a Full Stack Web App using the complete MERN Stack",
   "main": "server.js",
-  "proxy": "http://localhost:3001",
   "scripts": {
     "format": "prettier {,*/**/}*.{js,jsx,ts,tsx,json,html} --write",
     "lint:check": "eslint ./**/*.{js,jsx,ts.tsx,html} --quiet --resolve-plugins-relative-to .",

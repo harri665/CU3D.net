@@ -4,15 +4,13 @@ const routes = require('./routes');
 const PORT = process.env.PORT || 3001;
 const mongoose = require('mongoose');
 
-// Middleware to parse incoming requests
 server.use(
   express.urlencoded({
     extended: true,
   })
 );
 server.use(express.json());
-
-// Serve static assets in production
+// Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === 'production') {
   server.use(express.static('client/build'));
 }
@@ -20,18 +18,20 @@ if (process.env.NODE_ENV === 'production') {
 // Add routes, both API and view
 server.use(routes);
 
-// Connect to the MongoDB
-const dbURI = process.env.MONGODB_URI || 'mongodb://root:example@mongo:27017/mst?authSource=admin';
-
-mongoose.connect(dbURI, {
+// Connect to the Mongo DB
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mst', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected...'))
-.catch(err => console.error('MongoDB connection error:', err));
+  useFindAndModify: false,
+  useCreateIndex: true,
+});
 
 // Start the API server
 server.listen(PORT, (err) => {
-  if (err) console.error(err);
-  console.log(`Server is listening at: ${PORT} - Click Here => http://localhost:${PORT}`);
+  // eslint-disable-next-line no-console
+  if (err) console.log(err);
+  // eslint-disable-next-line no-console
+  console.log(
+    `Server is listening at: ${PORT} - Click Here => http://localhost:${PORT}`
+  );
 });
