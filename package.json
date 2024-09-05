@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/davidsaulrodriguez/mern-stack-template#readme",
   "dependencies": {
+    "ajv": "^8.17.1",
     "axios": "^0.21.1",
     "concurrently": "^6.0.0",
     "dotenv": "^8.2.0",
