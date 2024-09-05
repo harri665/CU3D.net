@@ -1,0 +1,28 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    # Build and push backend image
+    - name: Build and push backend Docker image
+      run: |
+        docker build -t harri665/mern-backend .
+        docker push harri665/mern-backend
+
+    # Build and push frontend image
+    - name: Build and push frontend Docker image
+      run: |
+        docker build -t harri665/mern-frontend ./client
+        docker push harri665/mern-frontend
