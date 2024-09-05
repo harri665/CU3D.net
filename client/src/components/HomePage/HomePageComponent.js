@@ -1,55 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import AnimatedCube from './AnimatedCube';
 import EventsGrid from './TimelineGrid';
 import AnnouncementBar from './AnnouncementBar';
 import RecentPosts from './RecentPosts';
 
-
-
 function Homepage() {
-  const samplePosts = [
-    {
-      title: 'Post 1',
-      excerpt: 'This is the excerpt for post 1',
-      imageUrl: 'https://via.placeholder.com/150',
-      content: 'Full content of post 1...',
-      images: [
-        'https://via.placeholder.com/300',
-        'https://via.placeholder.com/300/0000FF/808080',
-        'https://via.placeholder.com/300/FF0000/FFFFFF'
-      ]
-    },
-    {
-      title: 'Post 1',
-      excerpt: 'This is the excerpt for post 1',
-      imageUrl: 'https://via.placeholder.com/150',
-      content: 'Full content of post 1...',
-      images: [
-        'https://via.placeholder.com/300',
-        'https://via.placeholder.com/300/0000FF/808080',
-        'https://via.placeholder.com/300/FF0000/FFFFFF'
-      ]
-    },
-    {
-      title: 'Post 1',
-      excerpt: 'This is the excerpt for post 1',
-      imageUrl: 'https://via.placeholder.com/150',
-      content: 'Full content of post 1...',
-      images: [
-        'https://via.placeholder.com/300',
-        'https://via.placeholder.com/300/0000FF/808080',
-        'https://via.placeholder.com/300/FF0000/FFFFFF'
-      ]
-    },
-    // more posts...
-  ];
+  const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('/api/posts');
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
     <div className="homepage">
       <AnimatedCube />
-      <RecentPosts posts={samplePosts} />
-
+      <RecentPosts posts={posts} />
       <EventsGrid />
       <AnnouncementBar />
       <div className='h-screen'></div>
