@@ -1,31 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AnnouncementBar = () => {
-  const announcements = [
-    'Announcement 1: Welcome to our website!',
-    'Announcement 2: New products are available now.',
-    'Announcement 3: Check out our latest blog post!',
-    'Announcement 4: Sale ends this weekend!',
-  ];
-
+  const [announcements, setAnnouncements] = useState([]);
   const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
   const [visible, setVisible] = useState(true);
 
+  // Fetch announcements from the backend API
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await axios.get('/api/announcements');
+        setAnnouncements(response.data);
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
+
+  // Rotate announcements every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentAnnouncement((prev) => (prev + 1) % announcements.length);
-    }, 5000); // Change the announcement every 3 seconds
+      if (announcements.length > 0) {
+        setCurrentAnnouncement((prev) => (prev + 1) % announcements.length);
+      }
+    }, 5000);
 
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [announcements.length]);
+    return () => clearInterval(interval);
+  }, [announcements]);
 
+  // Handle scroll visibility of the announcement bar
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setVisible(false);
-      } else {
-        setVisible(true);
-      }
+      setVisible(window.scrollY === 0);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -41,7 +50,11 @@ const AnnouncementBar = () => {
         visible ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      <p className="animate-fadeIn">{announcements[currentAnnouncement]}</p>
+      <p className="animate-fadeIn">
+        {announcements.length > 0
+          ? announcements[currentAnnouncement].message
+          : 'Loading announcements...'}
+      </p>
     </div>
   );
 };
