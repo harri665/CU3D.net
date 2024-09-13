@@ -5,6 +5,7 @@ import './App.css';
 import HamburgerMenu from './components/HamburgerMenu';
 import FooterCard from './components/FooterCard';
 import AnnouncementModal from './components/AnnouncementModal';
+import DiscordEmbedForm from './components/Discord/DiscordEmbedForm';
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/timeline" element={<React.Fragment />} />
           <Route path="/events" element={<React.Fragment />} />
           <Route path="/footer" element={<React.Fragment />} />
+          <Route path="/discord" element={<DiscordEmbedForm/>}/>
         </Routes>
         
         {/* Footer */}
