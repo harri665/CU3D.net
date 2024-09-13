@@ -37,6 +37,8 @@
   "homepage": "https://github.com/davidsaulrodriguez/mern-stack-template#readme",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@react-three/drei": "^9.112.0",
+    "@react-three/fiber": "^8.17.7",
     "ajv": "^8.17.1",
     "axios": "^0.21.1",
     "concurrently": "^6.0.0",
@@ -44,9 +46,12 @@
     "discord.js": "^14.16.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "gsap": "^3.12.5",
     "helmet": "^4.4.1",
     "if-env": "^1.0.4",
     "mongoose": "^5.12.2",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
