@@ -7,6 +7,7 @@ services:
       - '3001:3001'
     environment:
       - MONGODB_URI=mongodb://mongo:27017/mst
+      - NODE_ENV=production
     depends_on:
       - mongo
     networks:
@@ -16,6 +17,8 @@ services:
     image: harri665/mern-frontend
     ports:
       - '80:80'
+    environment:
+      - NODE_ENV=production
     networks:
       - app-network
 
