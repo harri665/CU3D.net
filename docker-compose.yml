@@ -6,17 +6,18 @@ services:
     ports:
       - '3001:3001'
     environment:
-      - MONGODB_URI=mongodb://mongo:27017/mst
+      - MONGODB_URI=mongodb://root:example@mongo:27017/mst?authSource=admin
       - NODE_ENV=production
     depends_on:
       - mongo
     networks:
       - app-network
+    command: sh -c "sleep 10 && npm start" # Delay to ensure MongoDB is ready
 
   frontend:
     image: harri665/mern-frontend
     ports:
-      - '80:80'
+      - '3000:3000'
     environment:
       - NODE_ENV=production
     networks:
@@ -27,8 +28,8 @@ services:
     ports:
       - '27017:27017'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
     networks:
       - app-network
 

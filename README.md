@@ -1,5 +1,16 @@
 # BUID 
-``` 
+# IMPORTANT 
+## Make sure to change the proxy in ./client/package.json from 
+```
+"proxy": "http://localhost:3001",
+```
+to 
+```
+"proxy": "http://backend:3001",
+```
+
+```
+
 # Build backend image
 docker build -t harri665/mern-backend .
 

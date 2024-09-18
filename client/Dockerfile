@@ -1,5 +1,5 @@
 # Use Node.js base image
-FROM node:16-alpine as build
+FROM node:16-alpine
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -8,19 +8,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
-
 # Copy the rest of the project files
 COPY . .
 
-# Build the React app
-RUN npm run build
+# Expose the port React app runs on
+EXPOSE 3000
 
-# Use Nginx to serve the frontend
-FROM nginx:alpine
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
-
-# Expose the port
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the React app
+CMD ["npm", "run", "start"]
