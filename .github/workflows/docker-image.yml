@@ -15,6 +15,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    # Modify the proxy in ./client/package.json
+    - name: Update proxy in package.json
+      run: |
+        sed -i 's|"proxy": "http://localhost:3001"|"proxy": "http://backend:3001"|' ./client/package.json
+
     # Login to Docker Hub
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
