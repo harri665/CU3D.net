@@ -47,3 +47,19 @@
 
     4px 7px 8px rgba(0, 0, 0, 1);
 }
+
+
+/* Custom glow effect classes */
+.glow-red {
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+}
+
+.glow-green {
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+}
+
+
+.bg-stars {
+  background-image: radial-gradient(white, transparent 50%);
+  background-size: 2px 2px;
+}
