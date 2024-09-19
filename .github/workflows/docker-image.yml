@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: write  # Enable write access to repository contents
+
 jobs:
   update-proxy:
     runs-on: ubuntu-latest
@@ -33,10 +36,12 @@ jobs:
             git commit -m "Update proxy to backend:3001"
           fi
 
-      # Push changes to the branch from detached HEAD
+      # Push changes to the branch from detached HEAD using GITHUB_TOKEN
       - name: Push changes
         run: |
           git push origin HEAD:${GITHUB_REF#refs/heads/}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker-build:
     runs-on: ubuntu-latest
