@@ -34,7 +34,7 @@ const BackgroundObject = () => {
     // Load the GLB model
     const loader = new GLTFLoader();
     loader.load(
-      '/models/spacemouse.glb',
+      '/models/SpaceMouse.glb',
       (gltf) => {
         const model = gltf.scene;
         model.scale.set(0.5, 0.5, 0.5); // Adjust the scale if needed
