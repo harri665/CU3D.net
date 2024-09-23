@@ -94,12 +94,22 @@ const BackgroundObject = () => {
   }, []);
 
   return (
-  <div ref={mountRef} className="fixed inset-0 -z-10 bg-gradient-to-t from-[#182130] to-[#000000]">
-    {/* Stars effect */}
-    <div className="absolute inset-0 bg-stars bg-repeat opacity-40" />
-  </div>
-);
-;
+    <div ref={mountRef} className="fixed inset-0 -z-10 bg-gradient-to-b from-[#1B2735] to-[#090A0F]">
+      {/* Small stars */}
+      <div className="absolute w-px h-px star-small"></div>
+      {/* Medium stars */}
+      <div className="absolute w-2 h-2 star-medium"></div>
+      {/* Big stars */}
+      <div className="absolute w-3 h-3 star-big"></div>
+
+      {/* Title */}
+      <div className="absolute top-1/2 left-0 right-0 text-center text-white font-light text-4xl tracking-widest mt-[-60px] pl-2">
+        <span className="bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
+          Starry Sky
+        </span>
+      </div>
+    </div>
+  );
 };
 
 export default BackgroundObject;
