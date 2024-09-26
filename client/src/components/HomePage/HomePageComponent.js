@@ -1,35 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import AnimatedCube from './AnimatedCube';
-import EventsGrid from './TimelineGrid';
-import AnnouncementBar from './AnnouncementBar';
-import RecentPosts from './RecentPosts';
+  import React, { useState } from "react";
+  import Header from "./Header";
+  import Hero from "./Hero";
+  import AccentLines from "./AccentLines";
+  import Mountains from "./Mountains";
+  import ContentSection from "./ContentSection";
+  import ParticleBackground from "./ParticleBackground";
+  import AnimatedCube from "./AnimatedCube";  // Import the cube
+import EventsGrid from "./EventsGrid";
+import InstagramGrid from "./InstagramGrid";
+import AnnouncementBar from "./AnnouncementBar";
 
-function Homepage() {
-  const [posts, setPosts] = useState([]);
+  function Homepage() {
+    const [goldMode, setGoldMode] = useState(false);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get('/api/posts');
-        setPosts(response.data);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
+    const toggleGoldMode = () => {
+      setGoldMode(!goldMode);
     };
 
-    fetchPosts();
-  }, []);
+    return (
+      <div className={`${goldMode ? "gold" : ""} relative min-h-screen bg-gray-900`}>
 
-  return (
-    <div className="homepage">
-      <AnimatedCube />
-      <RecentPosts posts={posts} />
-      <EventsGrid />
-      <AnnouncementBar />
-      <div className='h-screen'></div>
-    </div>
-  );
-}
+        <AnnouncementBar/>
+        <ParticleBackground />
+        <AccentLines />
+        
+        <Hero />
+        <AnimatedCube className = "fixed top-0"/>  {/* Add the animated cube */}
 
-export default Homepage;
+        <Mountains /> 
+        <EventsGrid/>
+        <InstagramGrid/>
+        <ContentSection />
+      </div>
+    );
+  }
+
+  export default Homepage;
