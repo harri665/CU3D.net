@@ -71,6 +71,13 @@ const HamburgerMenu = () => {
           >
             Contact
           </Link>
+          <Link
+            to="/space-mouse"
+            onClick={toggleMenu}
+            className="transition-transform duration-300 transform hover:scale-110"
+          >
+            Space Mouse
+          </Link>
         </nav>
       </div>
     </>
