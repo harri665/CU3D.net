@@ -8,6 +8,7 @@ import AnnouncementModal from './components/AnnouncementModal';
 import DiscordEmbedForm from './components/Discord/DiscordEmbedForm';
 import SpaceMouseScanner from './components/SpaceMouse/SpaceMouseScanner';
 import SpaceMouseManager from './components/SpaceMouse/SpaceMouseManager';
+import AboutPage from './components/About/AboutPage';
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Homepage/>} />
           <Route path="/timeline" element={<React.Fragment />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/events" element={<React.Fragment />} />
           <Route path="/footer" element={<React.Fragment />} />
           <Route path="/discord" element={<DiscordEmbedForm/>}/>

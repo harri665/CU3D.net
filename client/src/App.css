@@ -194,3 +194,48 @@
   animation: mountainLoad2 1.5s forwards 0.2s;
 }
 
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Orbitron', sans-serif;
+  background-color: #0b0d17; /* Dark space color */
+  color: #ffffff; /* Star white color */
+}
+
+.glow {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.75);
+}
+
+.stars-animation {
+  background: transparent url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/stars.png') repeat top center;
+  animation: moveStars 50s linear infinite;
+}
+
+@keyframes moveStars {
+  from { background-position: 0 0; }
+  to { background-position: -10000px 5000px; }
+}
+
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
