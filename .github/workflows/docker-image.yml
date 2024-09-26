@@ -93,6 +93,7 @@ jobs:
           docker push harri665/mern-backend
 
       # Build and push frontend Docker image
+      - name: Build and push Frontend Docker Image 
         run: |
           docker build -t harri665/mern-frontend ./client
           docker push harri665/mern-frontend
