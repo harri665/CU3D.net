@@ -9,6 +9,7 @@ import DiscordEmbedForm from './components/Discord/DiscordEmbedForm';
 import SpaceMouseScanner from './components/SpaceMouse/SpaceMouseScanner';
 import SpaceMouseManager from './components/SpaceMouse/SpaceMouseManager';
 import AboutPage from './components/About/AboutPage';
+import SpaceMouse from './components/SpaceMouse/Spacemouse';
 
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/discord" element={<DiscordEmbedForm/>}/>
           <Route path="/space-mouse/:id" element={<SpaceMouseScanner/>}/> 
           <Route path="/space-mouse-manager" element={<SpaceMouseManager/>} />
+          <Route path="/space-mouse" element={<SpaceMouse/>} />
         </Routes>
         
         {/* Footer */}

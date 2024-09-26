@@ -11,6 +11,9 @@ const SpaceMouseSchema = new mongoose.Schema({
     checkedOutBy: { type: String },    // Name of the person checking out the space mouse
     phoneNumber: { type: String },     // Phone number of the person checking out
     duration: { type: String },        // Duration for which the space mouse is checked out
+
+    // New field for image texture
+    texture: { type: String },         // Path to the image texture
 });
 
 module.exports = mongoose.model('SpaceMouse', SpaceMouseSchema);
