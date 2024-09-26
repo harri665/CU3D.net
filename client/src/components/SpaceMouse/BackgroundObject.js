@@ -31,6 +31,26 @@ const BackgroundObject = () => {
     directionalLight.position.set(5, 10, 2.5).normalize();
     scene.add(directionalLight);
 
+    // Create starry background
+    const starGeometry = new THREE.BufferGeometry();
+    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
+
+    const starVertices = [];
+    for (let i = 0; i < 1000; i++) {
+      const x = (Math.random() - 0.5) * 2000;
+      const y = (Math.random() - 0.5) * 2000;
+      const z = (Math.random() - 0.5) * 2000;
+      starVertices.push(x, y, z);
+    }
+
+    starGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(starVertices, 3),
+    );
+
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+
     // Load the GLB model
     const loader = new GLTFLoader();
     loader.load(
@@ -45,8 +65,8 @@ const BackgroundObject = () => {
           if (child.isMesh) {
             child.material = new THREE.MeshStandardMaterial({
               color: 0xffffff, // Gray color for the metal
-              metalness: 1,    // Full metallic
-              roughness: 0.4,  // Some roughness for realism
+              metalness: 1, // Full metallic
+              roughness: 0.4, // Some roughness for realism
             });
           }
         });
@@ -94,21 +114,9 @@ const BackgroundObject = () => {
   }, []);
 
   return (
-    <div ref={mountRef} className="fixed inset-0 -z-10 bg-gradient-to-b from-[#1B2735] to-[#090A0F]">
-      {/* Small stars */}
-      <div className="absolute w-px h-px star-small"></div>
-      {/* Medium stars */}
-      <div className="absolute w-2 h-2 star-medium"></div>
-      {/* Big stars */}
-      <div className="absolute w-3 h-3 star-big"></div>
-
-      {/* Title */}
-      <div className="absolute top-1/2 left-0 right-0 text-center text-white font-light text-4xl tracking-widest mt-[-60px] pl-2">
-        <span className="bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
-          Starry Sky
-        </span>
-      </div>
-    </div>
+    <div
+      ref={mountRef}
+      className='fixed inset-0 -z-10 bg-gradient-to-b from-[#1B2735] to-[#090A0F]'></div>
   );
 };
 
