@@ -7,7 +7,7 @@ const CustomObject = ({ isHeader }) => {
   const meshRef = useRef();
   const { camera } = useThree();
   const { scene } = useGLTF('/models/CU3D.gltf');
-  
+
   useEffect(() => {
     if (!isHeader) {
       gsap.fromTo(
@@ -92,15 +92,17 @@ const AnimatedCube = () => {
       });
     } else {
       gsap.to('.header-container', {
-        position: 'relative',
+        position: 'fixed',
+        top: 0,
+        width: '100%',
         height: '100vh',
-        paddingTop: '50vh',
+        paddingTop: '0vh',
         ease: 'power3.out',
         duration: 0.5,
       });
 
       gsap.to('.canvas-container', {
-        height: 'calc(100vh - 60px)',
+        height: '100vh',
         ease: 'power3.out',
         duration: 0.5,
       });
@@ -109,35 +111,41 @@ const AnimatedCube = () => {
 
   return (
     <>
-      <div className={`relative w-full transition-all duration-500 top-0 h-[60px] left-0 ease-in-out ${isHeader ? 'header-container fixed top-0 left-0 z-50' : 'screen-container relative'}`}>
+      <div className={` pointer-events-none fixed w-full transition-all duration-500 top-0 h-[100vh] left-0 ease-in-out ${isHeader ? 'header-container fixed top-0 left-0 z-50' : 'screen-container abolsute'}`}>
         {/* Background Canvas */}
-        <div className="absolute top-0 left-0 w-full h-full z-0 canvas-container">
+        <div className="fixed top-0 left-0 w-full h-full z-0 canvas-container">
           <Canvas>
-            {/* Adjusted Lighting to Match Background Gradient */}
-            <ambientLight intensity={0.2} color="#ffffff" /> {/* Light beige color similar to the top of the gradient */}
-            <directionalLight
-              position={[-5, 5, 4]}
-              intensity={5}
-              color="#cebc9b" // Light beige color
+            {/* Space-Themed Lighting */}
+            <ambientLight intensity={10} color="#0d1b2a" /> {/* Very dark blue for the vastness of space */}
+            <pointLight
+              position={[10, 10, 10]}
+              intensity={1500}
+              color="#87CEEB" // Cool light blue, like distant stars
+            />
+            <pointLight
+              position={[-10, -10, -10]}
+              intensity={500}
+              color="#b0d2fb" // Deep purple, to add a sense of mystery
+            />
+            <spotLight
+              position={[0, 10, 5]}
+              angle={0.8}
+              intensity={1000}
+              penumbra={0.9}
+              color="#CFB87C" // Bright white to mimic strong light source like a star
               castShadow
               shadowMapWidth={1024}
               shadowMapHeight={1024}
-              shadowCameraFar={10}
+              shadowCameraFar={20}
               shadowCameraLeft={-10}
               shadowCameraRight={10}
               shadowCameraTop={10}
               shadowCameraBottom={-10}
             />
-            <directionalLight
-              position={[5, -5, -4]}
-              intensity={1.5}
-              color="#ffffff" // Dark brown color similar to the bottom of the gradient
-            />
             <CustomObject isHeader={isHeader} />
           </Canvas>
         </div>
       </div>
-      <div className={` ${isHeader ? 'h-screen' : 'h-screen'}`}></div>
     </>
   );
 };
