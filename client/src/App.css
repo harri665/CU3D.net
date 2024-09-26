@@ -20,46 +20,177 @@
   }
   
 
-  .homepage {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: rgba(206,188,155,1);
-    background: -moz-linear-gradient(-45deg, rgba(206,188,155,1) 0%, rgba(85,63,50,1) 51%, rgba(42,31,25,1) 100%);
-    background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(206,188,155,1)), color-stop(51%, rgba(85,63,50,1)), color-stop(100%, rgba(42,31,25,1)));
-    background: -webkit-linear-gradient(-45deg, rgba(206,188,155,1) 0%, rgba(85,63,50,1) 51%, rgba(42,31,25,1) 100%);
-    background: -o-linear-gradient(-45deg, rgba(206,188,155,1) 0%, rgba(85,63,50,1) 51%, rgba(42,31,25,1) 100%);
-    background: -ms-linear-gradient(-45deg, rgba(206,188,155,1) 0%, rgba(85,63,50,1) 51%, rgba(42,31,25,1) 100%);
-    background: linear-gradient(135deg, rgba(206,188,155,1) 0%, rgba(85,63,50,1) 51%, rgba(42,31,25,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cebc9b', endColorstr='#2a1f19', GradientType=1);
+
+.homepage {
+  position: relative;
+  overflow-x: hidden;  /* Prevent horizontal scrolling */
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;  /* Ensures SVGs do not block clicks */
+  transition: transform 0.5s ease-out;  /* Smooth animation */
+}
+
+.z-0 {
+  z-index: 0;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-1.6em);
   }
-  .header-text {
-  color: #70869d;
-  letter-spacing: .15em;
-  -webkit-text-stroke-width: .01em;
-  -webkit-text-stroke-color: white;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  text-shadow: 
-    -1px -1px 1px #efede3, 
-    
+@keyframes pulse {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 300% 50%;
+  }
+}
 
+.animate-fadeIn {
+  animation: fadeIn 2s forwards;
+}
 
-    4px 7px 8px rgba(0, 0, 0, 1);
+.animate-fadeInUp {
+  animation: fadeInUp 2s forwards;
+}
+
+.animate-pulse {
+  background-size: 200% 200%;
+  animation: pulse 10s linear infinite;
+}
+
+.animation-delay-0 {
+  animation-delay: 0s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 
 
-/* Custom glow effect classes */
-.glow-red {
-  box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(-1em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.glow-green {
-  box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+.animate-fadeInUp {
+  animation: fadeInUp 2s forwards;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.hover\:shadow-gold:hover {
+  box-shadow: -0.3em 0.1em 0.2em 0 #d8bd10;
 }
 
 
-.bg-stars {
-  background-image: radial-gradient(white, transparent 50%);
-  background-size: 2px 2px;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-1.6em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
+@keyframes pulse {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 300% 50%;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 2s forwards;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 2s forwards;
+}
+
+.animate-pulse {
+  background-size: 200% 200%;
+  animation: pulse 10s linear infinite;
+}
+
+.animation-delay-0 {
+  animation-delay: 0s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+
+@keyframes mountainLoad1 {
+  from {
+    opacity: 0;
+    transform: translateY(20%) rotate(45deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(45deg);
+  }
+}
+
+@keyframes mountainLoad2 {
+  from {
+    opacity: 0;
+    transform: translateY(20%) rotate(45deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(45deg);
+  }
+}
+
+.animate-mountainLoad1 {
+  animation: mountainLoad1 1.5s forwards;
+}
+
+.animate-mountainLoad2 {
+  animation: mountainLoad2 1.5s forwards 0.2s;
+}
+
