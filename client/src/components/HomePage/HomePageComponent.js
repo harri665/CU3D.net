@@ -22,7 +22,7 @@ import AnnouncementBar from "./AnnouncementBar";
 
 
         <ParticleBackground />
-        <AccentLines />
+        {/* <AccentLines /> */}
         
         <Hero />
         <AnimatedCube className = "fixed top-0"/>  {/* Add the animated cube */}
