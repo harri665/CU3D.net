@@ -20,7 +20,7 @@ import AnnouncementBar from "./AnnouncementBar";
     return (
       <div className={`${goldMode ? "gold" : ""} relative min-h-screen bg-gray-900`}>
 
-        <AnnouncementBar/>
+
         <ParticleBackground />
         <AccentLines />
         
@@ -31,6 +31,7 @@ import AnnouncementBar from "./AnnouncementBar";
         <EventsGrid/>
         <InstagramGrid/>
         <ContentSection />
+        <AnnouncementBar/>
       </div>
     );
   }
