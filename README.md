@@ -23,3 +23,6 @@ docker push harri665/mern-backend
 # Push frontend image to Docker Hub
 docker push harri665/mern-frontend
 ```
+
+
+# Main deploys to live server upon push/merge
