@@ -13,10 +13,28 @@ const ContactPage = () => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log('Form Data:', data);
-    // Handle form submission (e.g., send data to server or email service)
-    reset(); // Reset form fields after submission
+
+    try {
+      // Send form data to the backend
+      const response = await fetch('/api/discord/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log('Message sent successfully');
+        reset(); // Reset form fields after submission
+      } else {
+        console.error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   // Variants for Framer Motion animations
