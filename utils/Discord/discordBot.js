@@ -131,6 +131,35 @@ client.on('guildScheduledEventDelete', async (event) => {
   }
 });
 
+
+async function sendOrEditDiscordMessage(channelId, messageId, content, embeds, components) {
+  try {
+    // Fetch the channel
+    const channel = await client.channels.fetch(channelId);
+    if (messageId) {
+      // If messageId is provided, edit the existing message
+      const message = await channel.messages.fetch(messageId);
+      await message.edit({
+        content: content || message.content,
+        embeds: embeds || message.embeds,
+        components: components || message.components,
+      });
+      return { success: true, message: 'Message updated successfully' };
+    } else {
+      // If no messageId is provided, send a new message
+      await channel.send({
+        content: content,
+        embeds: embeds,
+        components: components,
+      });
+      return { success: true, message: 'New message sent successfully' };
+    }
+  } catch (error) {
+    console.error('Error sending or editing message:', error);
+    throw new Error('Failed to send or edit message');
+  }
+}
+
 // Start synchronization when the bot is ready
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -139,4 +168,4 @@ client.once('ready', () => {
   fetchAndSyncScheduledEvents(guildId);
 });
 
-module.exports = { syncEventWithDatabase };
+module.exports = { syncEventWithDatabase, sendOrEditDiscordMessage };
