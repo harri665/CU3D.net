@@ -1,26 +1,99 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, useGLTF, useTexture, Stars } from '@react-three/drei';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Canvas, useFrame, extend } from '@react-three/fiber';
+import {
+  OrbitControls,
+  useGLTF,
+  useTexture,
+  Stars,
+} from '@react-three/drei';
+import { Link } from 'react-router-dom';
 import * as THREE from 'three';
+import { motion } from 'framer-motion';
+import { a, useSpring } from '@react-spring/three';
+
+// Extend the animated group component for 3D objects
+const AnimatedGroup = a.group;
+
+// Simplified SVG Icons
+const PrecisionControlIcon = () => (
+  <svg
+    className="w-full h-48 mb-6"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="30" stroke="#ffffff" strokeWidth="4" />
+    <path
+      d="M32 16V32L44 44"
+      stroke="#ffffff"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+const ErgonomicDesignIcon = () => (
+  <svg
+    className="w-full h-48 mb-6"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <rect
+      x="12"
+      y="20"
+      width="40"
+      height="24"
+      rx="12"
+      stroke="#ffffff"
+      strokeWidth="4"
+    />
+    <circle cx="32" cy="32" r="6" fill="#ffffff" />
+  </svg>
+);
+
+const CustomizableButtonsIcon = () => (
+  <svg
+    className="w-full h-48 mb-6"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <rect x="16" y="16" width="32" height="32" stroke="#ffffff" strokeWidth="4" />
+    <path
+      d="M32 20V44"
+      stroke="#ffffff"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    <path
+      d="M20 32H44"
+      stroke="#ffffff"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 
 // Space Mouse 3D Model Component
 const SpaceMouseModel = ({ texturePath }) => {
-  const { scene } = useGLTF('/models/SpaceMouse.glb'); // Load the 3D model
-  const texture = useTexture(texturePath); // Load texture using the provided path
+  const { scene } = useGLTF('/models/SpaceMouse.glb');
+  const texture = useTexture(texturePath);
   const modelRef = useRef();
+
+  // State for hover effect
+  const [hovered, setHovered] = useState(false);
 
   // Apply metallic material to the model's material
   useEffect(() => {
     if (scene && texture) {
       scene.traverse((child) => {
         if (child.isMesh) {
-          child.material = new THREE.MeshStandardMaterial({
-            map: texture, // Apply texture
-            metalness: 0.9, // Set metalness to full (1.0 for metallic effect)
-            roughness: 0.2, // Set roughness for a shiny look (lower value is shinier)
-            envMapIntensity: 1, // Optionally adjust environment map intensity for reflection
-            color: 0xaaaaaa, // Optional: You can set a base color (gray metallic look)
+          child.material = new THREE.MeshPhysicalMaterial({
+            map: texture,
+            metalness: 0.9,
+            roughness: 0.1,
+            clearcoat: 1,
+            clearcoatRoughness: 0,
+            reflectivity: 1,
+            color: new THREE.Color('#ffffff'),
           });
           child.material.needsUpdate = true;
         }
@@ -28,18 +101,32 @@ const SpaceMouseModel = ({ texturePath }) => {
     }
   }, [scene, texture]);
 
-  // Rotate the model on each frame for the specific instance of this component
+  // Rotate the model and make it responsive to hover
   useFrame(() => {
     if (modelRef.current) {
-      modelRef.current.rotation.y += 0.01; // Adjust the rotation speed as needed
+      modelRef.current.rotation.y += hovered ? 0.02 : 0.005;
     }
   });
 
-  return <primitive ref={modelRef} object={scene.clone()} scale={0.6} />; // Clone the scene for each canvas
+  // Animation for scale on hover
+  const { scale } = useSpring({
+    scale: hovered ? 0.7 : 0.6,
+    config: { mass: 1, tension: 170, friction: 26 },
+  });
+
+  return (
+    <AnimatedGroup
+      ref={modelRef}
+      scale={scale}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}>
+      <primitive object={scene.clone()} />
+    </AnimatedGroup>
+  );
 };
 
 const SpaceMouseAdPage = () => {
-  const [spaceMouses, setSpaceMouses] = useState([]); // State to store space mouses
+  const [spaceMouses, setSpaceMouses] = useState([]);
   const nextSectionRef = useRef(null);
 
   // Function to fetch space mouses from the API
@@ -67,8 +154,19 @@ const SpaceMouseAdPage = () => {
     (mouse) => mouse.status === 'checked_in',
   );
 
+  // Variants for Framer Motion animations
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.3 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div className='min-h-screen bg-gradient-to-br w-full from-black via-purple-900 to-blue-900 text-white relative overflow-hidden'>
+    <div className='min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden font-sans'>
       {/* Stars in the background */}
       <div className='absolute top-0 left-0 w-full h-full z-0'>
         <Canvas className='absolute top-0 left-0 w-full h-full'>
@@ -84,126 +182,147 @@ const SpaceMouseAdPage = () => {
       </div>
 
       {/* Hero Section */}
-      <section className='relative z-10 text-center py-16'>
-        <h1 className='text-5xl font-extrabold mb-4 tracking-wide animate-pulse'>
-          Experience the Future with the Space Mouse
-        </h1>
-        <p className='text-xl font-light mb-10 animate-fadeInSlow'>
+      <section className='relative z-10 text-center py-20 px-4'>
+        <motion.h1
+          className='text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight'
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}>
+          Experience the Future with the{' '}
+          <span className='text-indigo-500'>Space Mouse</span>
+        </motion.h1>
+        <motion.p
+          className='text-xl md:text-2xl font-light mb-12 max-w-2xl mx-auto'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}>
           Unlock unparalleled precision and control in 3D design with the Space
           Mouse, crafted for professionals and enthusiasts alike.
-        </p>
+        </motion.p>
 
         {/* Canvas for 3D Model with Text Overlay and Rounded Corner Border */}
-        <div className='relative w-full md:w-3/4 h-[40vh] mx-auto'>
-          <div className='relative rounded-3xl p-2 w-full h-full border-4 border-transparent border-t border-r border-b border-l border-blue-500'>
+        <div className='relative w-full md:w-3/4 h-[50vh] mx-auto'>
+          <div className='relative rounded-3xl p-2 w-full h-full bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg'>
             <Canvas className='rounded-3xl'>
-              <ambientLight intensity={0.3} color={'#3A3A98'} />
-              <pointLight
-                position={[10, 10, 10]}
-                intensity={1500}
-                color={'#6B8EFC'}
-              />
-              <pointLight
-                position={[-10, -10, -10]}
-                intensity={2500}
-                color={'#3046F0'}
+              <ambientLight intensity={0.5} color={'#ffffff'} />
+              <directionalLight
+                position={[0, 10, 10]}
+                intensity={1}
+                color={'#ffffff'}
               />
               <OrbitControls enableZoom={false} />
-              <SpaceMouseModel texturePath='/qrcodes/1f4dce43-f021-4883-b380-0c4c0083373a.png' />{' '}
-              {/* Default texture */}
+              <SpaceMouseModel texturePath='/qrcodes/1f4dce43-f021-4883-b380-0c4c0083373a.png' />
             </Canvas>
           </div>
 
-          {/* "Click Here to Get Yours" Text */}
+          {/* "Click Here to Get Yours" Button */}
           <div className='absolute inset-0 flex items-center justify-center'>
-            <button
+            <motion.button
               onClick={scrollToNextSection}
-              className='text-white bg-purple-800 hover:bg-purple-900 text-lg font-semibold px-6 py-2 rounded-full shadow-lg transition transform hover:scale-105'>
+              className='text-white bg-indigo-600 bg-opacity-90 hover:bg-indigo-700 text-lg font-medium px-8 py-3 rounded-full shadow-lg transition transform'
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}>
               Click Here to Get Yours
-            </button>
+            </motion.button>
           </div>
 
           {/* Rounded Corner Border */}
-          <div className='absolute inset-0 rounded-3xl border border-white pointer-events-none border-opacity-30'></div>
+          <div className='absolute inset-0 rounded-3xl border border-white border-opacity-20 pointer-events-none'></div>
         </div>
       </section>
+
       {/* Space Mouse Features */}
-      <section className='py-16 relative z-10' ref={nextSectionRef}>
+      <section className='py-20 relative z-10' ref={nextSectionRef}>
         <div className='container mx-auto px-4'>
-          <h2 className='text-4xl font-bold text-center mb-10'>
+          <motion.h2
+            className='text-4xl md:text-5xl font-bold text-center mb-16'
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}>
             Why Choose the Space Mouse?
-          </h2>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+          </motion.h2>
+          <motion.div
+            className='grid grid-cols-1 md:grid-cols-3 gap-12'
+            variants={containerVariants}
+            initial='hidden'
+            whileInView='visible'
+            viewport={{ once: true }}>
             {/* Feature 1 */}
-            <div className='p-6 bg-gray-900 bg-opacity-60 backdrop-blur-md rounded-lg shadow-lg hover:scale-105 transform transition duration-300'>
-              <img
-                src='/path/to/precision-control.jpg'
-                alt='Precision Control'
-                className='w-full h-48 object-cover rounded-lg mb-4'
-              />
-              <h3 className='text-2xl font-semibold mb-2'>Precision Control</h3>
+            <motion.div
+              className='p-8 bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-xl shadow-lg transform transition duration-300'
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}>
+              <PrecisionControlIcon />
+              <h3 className='text-2xl font-semibold mb-4'>Precision Control</h3>
               <p className='font-light text-gray-300'>
-                Gain unmatched control with 6 degrees of freedom, allowing you
-                to navigate complex 3D environments effortlessly.
+                Gain unmatched control with 6 degrees of freedom, allowing you to
+                navigate complex 3D environments effortlessly.
               </p>
-            </div>
+            </motion.div>
 
             {/* Feature 2 */}
-            <div className='p-6 bg-gray-900 bg-opacity-60 backdrop-blur-md rounded-lg shadow-lg hover:scale-105 transform transition duration-300'>
-              <img
-                src='/path/to/ergonomic-design.jpg'
-                alt='Ergonomic Design'
-                className='w-full h-48 object-cover rounded-lg mb-4'
-              />
-              <h3 className='text-2xl font-semibold mb-2'>Ergonomic Design</h3>
+            <motion.div
+              className='p-8 bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-xl shadow-lg transform transition duration-300'
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}>
+              <ErgonomicDesignIcon />
+              <h3 className='text-2xl font-semibold mb-4'>Ergonomic Design</h3>
               <p className='font-light text-gray-300'>
-                Designed to fit comfortably in your hand for hours of
-                stress-free use, enhancing your productivity in every project.
+                Designed to fit comfortably in your hand for hours of stress-free
+                use, enhancing your productivity in every project.
               </p>
-            </div>
+            </motion.div>
 
             {/* Feature 3 */}
-            <div className='p-6 bg-gray-900 bg-opacity-60 backdrop-blur-md rounded-lg shadow-lg hover:scale-105 transform transition duration-300'>
-              <img
-                src='/path/to/customizable-buttons.jpg'
-                alt='Customizable Buttons'
-                className='w-full h-48 object-cover rounded-lg mb-4'
-              />
-              <h3 className='text-2xl font-semibold mb-2'>
+            <motion.div
+              className='p-8 bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-xl shadow-lg transform transition duration-300'
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}>
+              <CustomizableButtonsIcon />
+              <h3 className='text-2xl font-semibold mb-4'>
                 Customizable Buttons
               </h3>
               <p className='font-light text-gray-300'>
                 Program the buttons to execute your most-used commands with a
                 single click, enhancing workflow efficiency.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
-      {/* Space Mouse Features */}
-      <section className='py-16 relative z-10' ref={nextSectionRef}>
+
+      {/* Available Space Mice */}
+      <section className='py-20 relative z-10'>
         <div className='container mx-auto px-4'>
-          <h2 className='text-4xl font-bold text-center mb-10'>
-            Available Space Mouses
-          </h2>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+          <motion.h2
+            className='text-4xl md:text-5xl font-bold text-center mb-16'
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}>
+            Available Space Mice
+          </motion.h2>
+          <motion.div
+            className='grid grid-cols-1 md:grid-cols-3 gap-12'
+            variants={containerVariants}
+            initial='hidden'
+            whileInView='visible'
+            viewport={{ once: true }}>
             {checkedInMouses.map((mouse, index) => (
               <Link
-                to={`/space-mouse/${mouse.id}`} // Navigate to the space mouse detail page
+                to={`/space-mouse/${mouse.id}`}
                 key={mouse.id}
-                className='p-6 bg-gray-900 bg-opacity-60 backdrop-blur-md rounded-lg shadow-lg hover:scale-105 transform transition duration-300'>
-                <div className='relative h-48'>
+                className='p-8 bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-xl shadow-lg transform transition duration-300 hover:scale-105'>
+                <motion.div
+                  className='relative h-48 mb-6'
+                  variants={itemVariants}>
                   <Canvas key={`canvas-${index}`} className='rounded-lg'>
-                    <ambientLight intensity={0.3} color={'#3A3A98'} />
-                    <pointLight
-                      position={[10, 10, 10]}
-                      intensity={1500}
-                      color={'#6B8EFC'}
-                    />
-                    <pointLight
-                      position={[-10, -10, -10]}
-                      intensity={2500}
-                      color={'#3046F0'}
+                    <ambientLight intensity={0.5} color={'#ffffff'} />
+                    <directionalLight
+                      position={[0, 10, 10]}
+                      intensity={1}
+                      color={'#ffffff'}
                     />
                     <OrbitControls enableZoom={false} />
                     <SpaceMouseModel
@@ -211,12 +330,11 @@ const SpaceMouseAdPage = () => {
                         mouse.texture ||
                         '/qrcodes/1f4dce43-f021-4883-b380-0c4c0083373a.png'
                       }
-                    />{' '}
-                    {/* Pass texture path */}
+                    />
                   </Canvas>
-                </div>
-                <h3 className='text-2xl font-semibold mt-4'>{mouse.name}</h3>
-                <p className='font-light text-gray-300'>
+                </motion.div>
+                <h3 className='text-2xl font-semibold mb-2'>{mouse.name}</h3>
+                <p className='font-light text-gray-300 mb-1'>
                   Status: {mouse.status.replace('_', ' ')}
                 </p>
                 <p className='font-light text-gray-300'>
@@ -227,28 +345,45 @@ const SpaceMouseAdPage = () => {
                 </p>
               </Link>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className='py-16 text-center bg-gradient-to-r from-blue-800 to-purple-800 relative z-10'>
-        <h2 className='text-4xl font-bold mb-4 animate-pulse'>
+      <section className='py-20 text-center bg-gradient-to-r from-indigo-700 via-purple-700 to-indigo-700 relative z-10'>
+        <motion.h2
+          className='text-4xl md:text-5xl font-bold mb-6'
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}>
           Take Your 3D Design to the Next Level
-        </h2>
-        <p className='text-lg font-light mb-6 animate-fadeInSlow'>
-          Ready to elevate your 3D modeling experience? Check out the Space
-          Mouse now!
-        </p>
-        <a
+        </motion.h2>
+        <motion.p
+          className='text-lg md:text-xl font-light mb-10 max-w-xl mx-auto'
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.3 }}>
+          Ready to elevate your 3D modeling experience? Check out the Space Mouse
+          now!
+        </motion.p>
+        <motion.a
           href='/checkout'
-          className='px-8 py-3 text-lg font-semibold bg-white text-gray-900 rounded-lg shadow-md hover:bg-gray-200 transition'>
+          className='inline-block px-10 py-4 text-lg font-medium bg-white text-gray-900 rounded-full shadow-md hover:bg-gray-200 transition'
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}>
           Get Yours Today
-        </a>
+        </motion.a>
       </section>
 
+      {/* Footer */}
+      <footer className='py-8 text-center text-gray-400 text-sm'>
+        © {new Date().getFullYear()} Space Mouse Inc. All rights reserved.
+      </footer>
+
       {/* Nebula glow effect */}
-      <div className='absolute top-0 left-0 w-full h-full bg-gradient-to-r from-purple-800 via-transparent to-blue-900 opacity-30 pointer-events-none' />
+      <div className='absolute top-0 left-0 w-full h-full bg-gradient-to-r from-purple-800 via-transparent to-indigo-900 opacity-20 pointer-events-none' />
     </div>
   );
 };

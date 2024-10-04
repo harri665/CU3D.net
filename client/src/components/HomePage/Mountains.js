@@ -36,11 +36,11 @@ const Mountains = () => {
       const scrollY = window.scrollY;
       
       // Example threshold: Change the background after 100px, 200px, and 300px of scrolling
-      setMountainBackgrounds({
-        mountain1: scrollY > 100 ? "url('/img/f360.png')" : "",
-        mountain2: scrollY > 200 ? "url('/logo.png')" : "",
-        mountain3: scrollY > 300 ? "url('/img/blender.png')" : "",
-      });
+      // setMountainBackgrounds({
+      //   mountain1: scrollY > 100 ? "url('/img/f360.png')" : "",
+      //   mountain2: scrollY > 200 ? "url('/logo.png')" : "",
+      //   mountain3: scrollY > 300 ? "url('/img/blender.png')" : "",
+      // });
     };
 
     window.addEventListener("scroll", handleScroll);

@@ -20,9 +20,9 @@ import AnnouncementBar from "./AnnouncementBar";
     return (
       <div className={`${goldMode ? "gold" : ""} relative min-h-screen bg-gray-900`}>
 
-        <AnnouncementBar/>
+
         <ParticleBackground />
-        <AccentLines />
+        {/* <AccentLines /> */}
         
         <Hero />
         <AnimatedCube className = "fixed top-0"/>  {/* Add the animated cube */}
@@ -31,6 +31,7 @@ import AnnouncementBar from "./AnnouncementBar";
         <EventsGrid/>
         <InstagramGrid/>
         <ContentSection />
+        <AnnouncementBar/>
       </div>
     );
   }
