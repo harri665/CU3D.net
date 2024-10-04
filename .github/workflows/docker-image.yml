@@ -37,6 +37,7 @@ jobs:
       # Pull latest changes and push modifications to the branch from detached HEAD using GITHUB_TOKEN
       - name: Push changes
         run: |
+          git config pull.rebase false  # merge
           git pull origin main
           git push origin HEAD:${GITHUB_REF#refs/heads/}
         env:
@@ -58,6 +59,7 @@ jobs:
       # Commit the changes in docker-build action if any
       - name: Commit proxy change (docker-build)
         run: |
+          git config pull.rebase false  # merge
           git pull origin main
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
@@ -91,7 +93,7 @@ jobs:
           docker push harri665/mern-backend
 
       # Build and push frontend Docker image
-      - name: Build and push frontend Docker image
+      - name: Build and push Frontend Docker Image 
         run: |
           docker build -t harri665/mern-frontend ./client
           docker push harri665/mern-frontend
