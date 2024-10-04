@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame, extend } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import {
   OrbitControls,
   useGLTF,
@@ -75,25 +75,22 @@ const CustomizableButtonsIcon = () => (
 // Space Mouse 3D Model Component
 const SpaceMouseModel = ({ texturePath }) => {
   const { scene } = useGLTF('/models/SpaceMouse.glb');
-  const texture = useTexture(texturePath);
+  const texture = useTexture(texturePath || '/defaultTexture.png');
   const modelRef = useRef();
 
   // State for hover effect
   const [hovered, setHovered] = useState(false);
 
-  // Apply metallic material to the model's material
+  // Apply texture to the model
   useEffect(() => {
     if (scene && texture) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       scene.traverse((child) => {
         if (child.isMesh) {
-          child.material = new THREE.MeshPhysicalMaterial({
+          child.material = new THREE.MeshStandardMaterial({
             map: texture,
-            metalness: 0.9,
-            roughness: 0.1,
-            clearcoat: 1,
-            clearcoatRoughness: 0,
-            reflectivity: 1,
-            color: new THREE.Color('#ffffff'),
+            metalness: 0.5,
+            roughness: 0.5,
           });
           child.material.needsUpdate = true;
         }
@@ -211,7 +208,7 @@ const SpaceMouseAdPage = () => {
                 color={'#ffffff'}
               />
               <OrbitControls enableZoom={false} />
-              <SpaceMouseModel texturePath='/qrcodes/1f4dce43-f021-4883-b380-0c4c0083373a.png' />
+              <SpaceMouseModel texturePath="" />
             </Canvas>
           </div>
 
@@ -325,12 +322,7 @@ const SpaceMouseAdPage = () => {
                       color={'#ffffff'}
                     />
                     <OrbitControls enableZoom={false} />
-                    <SpaceMouseModel
-                      texturePath={
-                        mouse.texture ||
-                        '/qrcodes/1f4dce43-f021-4883-b380-0c4c0083373a.png'
-                      }
-                    />
+                    <SpaceMouseModel texturePath={mouse.texture || '/defaultTexture.png'} />
                   </Canvas>
                 </motion.div>
                 <h3 className='text-2xl font-semibold mb-2'>{mouse.name}</h3>
