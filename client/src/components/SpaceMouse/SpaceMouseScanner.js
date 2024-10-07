@@ -9,6 +9,7 @@ const SpaceMouseForm = () => {
     const [isFormVisible, setIsFormVisible] = useState(false); // Controls the visibility of the form
     const [formData, setFormData] = useState({
         name: '',
+        email: '',
         number: '',
         duration: ''
     });
@@ -56,7 +57,7 @@ const SpaceMouseForm = () => {
                 setSpaceMouse((prev) => ({ ...prev, status: result.status }));
                 // Reset form data if checking out
                 if (action === 'check-out') {
-                    setFormData({ name: '', number: '', duration: '' });
+                    setFormData({ name: '', number: '', duration: '' , email: ''});
                     setIsFormVisible(false); // Hide form after successful checkout
                 }
             } else {
@@ -136,7 +137,17 @@ const SpaceMouseForm = () => {
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block mb-1 text-white">Duration (in hours)</label>
+                                    <label className="block mb-1 text-white">Your Email</label>
+                                    <input 
+                                        type="text" 
+                                        name="email" 
+                                        value={formData.email} 
+                                        onChange={handleChange} 
+                                        className="w-full px-3 py-2 rounded-lg text-black"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block mb-1 text-white">Duration ex. 1 week 1 semester</label>
                                     <input 
                                         type="text" 
                                         name="duration" 

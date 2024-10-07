@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
         }
 
         // Generate QR code and save it as a PNG buffer
-        const qrCodeBuffer = await QRCode.toBuffer(`http://yourwebsite.com/space-mouse/${id}`, {
+        const qrCodeBuffer = await QRCode.toBuffer(`http://cu3d.net/space-mouse/${id}`, {
             width: 300, // Adjust size of the QR code
             margin: 2,
             color: {
@@ -89,6 +89,54 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Other routes like check-in, check-out, update, delete, etc...
+// Check in a space mouse
+router.post('/:id/check-in', async (req, res) => {
+    try {
+        const spaceMouse = await SpaceMouse.findOne({ id: req.params.id });
+        if (!spaceMouse) {
+            return res.status(404).json({ message: 'Space mouse not found' });
+        }
+        if (spaceMouse.status === 'checked_in') {
+            return res.status(400).json({ message: 'Space mouse already checked in' });
+        }
+        // Reset check-out-related fields
+        spaceMouse.status = 'checked_in';
+        spaceMouse.checkedOutBy = null;
+        spaceMouse.phoneNumber = null;
+        spaceMouse.duration = null;
+        spaceMouse.lastCheckedOutDate = null;
+        spaceMouse.email = null; 
+        await spaceMouse.save();
+        res.json({ status: 'checked in', spaceMouse });
+    } catch (error) {
+        console.error('Error checking in space mouse:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+// Check out a space mouse
+router.post('/:id/check-out', async (req, res) => {
+    const { name, phoneNumber, duration, email } = req.body; // Extract the form data
+    try {
+        const spaceMouse = await SpaceMouse.findOne({ id: req.params.id });
+        if (!spaceMouse) {
+            return res.status(404).json({ message: 'Space mouse not found' });
+        }
+        if (spaceMouse.status === 'checked_out') {
+            return res.status(400).json({ message: 'Space mouse already checked out' });
+        }
+        // Update the space mouse with the check-out information
+        spaceMouse.status = 'checked_out';
+        spaceMouse.lastCheckedOutDate = new Date();
+        spaceMouse.checkedOutBy = name;
+        spaceMouse.phoneNumber = phoneNumber;
+        spaceMouse.duration = duration;
+        spaceMouse.email = email;
+        await spaceMouse.save();
+        res.json({ status: 'checked out', spaceMouse });
+    } catch (error) {
+        console.error('Error checking out space mouse:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 module.exports = router;
