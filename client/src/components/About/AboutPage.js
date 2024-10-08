@@ -206,21 +206,17 @@ const AboutPage = () => {
               whileHover={{ scale: 1.05 }}>
               <div className='w-40 h-40 mx-auto mb-6 rounded-full bg-white bg-opacity-10 flex items-center justify-center'>
                 {/* Placeholder for Profile Picture */}
-                <svg
-                  className='w-20 h-20 text-gray-300'
-                  fill='currentColor'
-                  viewBox='0 0 20 20'
-                  xmlns='http://www.w3.org/2000/svg'>
-                  <path
-                    fillRule='evenodd'
-                    d='M10 0a10 10 0 100 20 10 10 0 000-20zM8 6a2 2 0 114 0 2 2 0 01-4 0zm4 4a4 4 0 00-8 0v1h8v-1a4 4 0 000-1z'
-                    clipRule='evenodd'></path>
-                </svg>
+                <img
+                  src='/img/Andrew.jpg'
+                  alt='Taylor Nguyen'
+                  className='w-full h-full object-cover rounded-full'
+                />
               </div>
-              <h3 className='text-2xl font-semibold mb-2'>Jordan Lee</h3>
+              <h3 className='text-2xl font-semibold mb-2'>Andrew Widner</h3>
               <p className='font-light text-gray-300 mb-1'>President</p>
               <p className='font-light text-gray-400 text-sm'>
-                Senior in Mechanical Engineering, passionate about 3D printing.
+              Andrew Widner is a multi talented 3D designer, and spends most of his time doing product design and 3D printing, and VFX at Fiske Planetarium. He founded CU3D with the goal of bringing 3D designers of all skill levels together in a welcoming and engaging community. Andrew is a senior graduating in Creative Technology and Design in May of 2025.
+
               </p>
             </motion.div>
 
@@ -231,21 +227,16 @@ const AboutPage = () => {
               whileHover={{ scale: 1.05 }}>
               <div className='w-40 h-40 mx-auto mb-6 rounded-full bg-white bg-opacity-10 flex items-center justify-center'>
                 {/* Placeholder for Profile Picture */}
-                <svg
-                  className='w-20 h-20 text-gray-300'
-                  fill='currentColor'
-                  viewBox='0 0 20 20'
-                  xmlns='http://www.w3.org/2000/svg'>
-                  <path
-                    fillRule='evenodd'
-                    d='M10 0a10 10 0 100 20 10 10 0 000-20zM8 6a2 2 0 114 0 2 2 0 01-4 0zm4 4a4 4 0 00-8 0v1h8v-1a4 4 0 000-1z'
-                    clipRule='evenodd'></path>
-                </svg>
+                <img
+                  src='/img/Harrison.png'
+                  alt='Harrison Martin'
+                  className='w-full h-full object-cover rounded-full'
+                />
               </div>
-              <h3 className='text-2xl font-semibold mb-2'>Alex Martinez</h3>
+              <h3 className='text-2xl font-semibold mb-2'>Harrison Martin</h3>
               <p className='font-light text-gray-300 mb-1'>Vice President</p>
               <p className='font-light text-gray-400 text-sm'>
-                Junior in Computer Science, specializing in 3D modeling software.
+                  Cool person i guess 
               </p>
             </motion.div>
 
