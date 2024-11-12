@@ -201,7 +201,7 @@ const ContactPage = () => {
           Connect with other 3D enthusiasts, stay up to date with club events, and collaborate with fellow members on exciting projects. Our Discord community is the perfect place to share ideas and grow together!
         </motion.p>
         <motion.a
-          href='https://discord.com/invite/YOUR_DISCORD_INVITE_LINK'
+          href='https://discord.com/invite/CS45mQWgPE'
           target='_blank'
           rel='noopener noreferrer'
           className='inline-block px-10 py-4 text-lg font-medium bg-white text-gray-900 rounded-full shadow-md hover:bg-gray-200 transition'
