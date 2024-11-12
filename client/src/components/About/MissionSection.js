@@ -11,7 +11,7 @@ const MissionSection = () => {
           Our Mission
         </h2>
         <p className="max-w-3xl mx-auto text-lg text-gray-200">
-          To explore the universe and bring the wonders of space closer to everyone.
+          To explore the possibilities of 3D modeling, CAD, and 3D printing.
         </p>
       </div>
     </section>

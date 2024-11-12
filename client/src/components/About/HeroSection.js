@@ -29,7 +29,7 @@ const HeroSection = () => {
           About Us
         </h1>
         <p className="text-xl max-w-2xl mx-auto text-gray-200">
-          Journey beyond the stars with us.
+          Join our community of 3D designers
         </p>
       </div>
     </section>
