@@ -247,21 +247,17 @@ const AboutPage = () => {
               whileHover={{ scale: 1.05 }}>
               <div className='w-40 h-40 mx-auto mb-6 rounded-full bg-white bg-opacity-10 flex items-center justify-center'>
                 {/* Placeholder for Profile Picture */}
-                <svg
-                  className='w-20 h-20 text-gray-300'
-                  fill='currentColor'
-                  viewBox='0 0 20 20'
-                  xmlns='http://www.w3.org/2000/svg'>
-                  <path
-                    fillRule='evenodd'
-                    d='M10 0a10 10 0 100 20 10 10 0 000-20zM8 6a2 2 0 114 0 2 2 0 01-4 0zm4 4a4 4 0 00-8 0v1h8v-1a4 4 0 000-1z'
-                    clipRule='evenodd'></path>
-                </svg>
+                <img
+                  src='/img/Aiden.jpg'
+                  alt='Harrison Martin'
+                  className='w-full h-full object-cover rounded-full'
+                />
               </div>
-              <h3 className='text-2xl font-semibold mb-2'>Taylor Nguyen</h3>
+              <h3 className='text-2xl font-semibold mb-2'>Aiden Roof</h3>
               <p className='font-light text-gray-300 mb-1'>Treasurer</p>
               <p className='font-light text-gray-400 text-sm'>
-                Sophomore in Electrical Engineering, manages club resources.
+              Hi! I'm Aidan, and i'm the community director here at CU3D. I help get people involved at our various activities and workshops by creating promotional material like posters and videos. Getting the word out about what we do here is super important for the community, weather  you're a brand new 3D artist or a tenure pro
+              jackson, brump, hammer, funkle, drenty, frain
               </p>
             </motion.div>
           </motion.div>
