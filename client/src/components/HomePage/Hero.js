@@ -19,8 +19,8 @@ const Hero = () => {
         </h2>
       </div>
       <p className="mt-6 text-xl text-transparent bg-clip-text bg-gradient-to-b from-blue-200 to-blue-400 opacity-0 animate-fadeInUp animation-delay-2000">
-        The premier platform for 3D printing, <br />
-        powered by CU3D innovations and cutting-edge technology.
+        For students. By students. Let's learn 3D design together. <br />
+        
       </p>
     </section>
   );

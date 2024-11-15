@@ -75,7 +75,7 @@ const Mountains = () => {
                 isVisible ? "opacity-100 text-blue-300" : "opacity-0"
               }`}
             >
-              Fusion 360 
+              CAD 
             </p>
           </div>
 
@@ -96,7 +96,7 @@ const Mountains = () => {
                 isVisible ? "opacity-100 text-blue-300" : "opacity-0"
               }`}
             >
-              CU3D
+              Blender
             </p>
           </div>
 
@@ -117,7 +117,7 @@ const Mountains = () => {
                 isVisible ? "opacity-100 text-blue-300" : "opacity-0"
               }`}
             >
-              Blender
+              3D printing
             </p>
           </div>
         </div>

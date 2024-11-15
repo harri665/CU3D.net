@@ -92,7 +92,7 @@ const AboutPage = () => {
               </div>
               <h3 className='text-2xl font-semibold mb-4'>Collaboration</h3>
               <p className='font-light text-gray-300'>
-                We believe in the power of teamwork and shared knowledge to achieve greater innovation in 3D technology.
+                We believe in the power of teamwork and shared knowledge to help students develop portfolios, strengthen their skills, and grow together.
               </p>
             </motion.div>
 
@@ -176,12 +176,12 @@ const AboutPage = () => {
           <motion.p
             className='text-lg md:text-xl font-light max-w-4xl mx-auto leading-relaxed text-left'
             variants={itemVariants}>
-            Founded in 2015, CU3D began as a small group of students passionate about 3D printing and modeling. Recognizing the growing importance of 3D technology in various industries, our founders aimed to create a space where students could collaborate, share knowledge, and work on exciting projects.
+            Founded in 2024, CU3D began as a small group of students passionate about 3D printing and modeling who met in an Atlas Institute motion capture course. Andrew Widner founded the club with the help of Harrison Martin and Aidan Roof, aiming to create a space for beginner and expert 3D desiners alike to learn, share, and grow.
           </motion.p>
           <motion.p
             className='text-lg md:text-xl font-light max-w-4xl mx-auto leading-relaxed text-left mt-6'
             variants={itemVariants}>
-            Today, CU3D has grown into a vibrant community, hosting workshops, guest lectures, and collaborative projects. We partner with local businesses and university departments to provide members with real-world experience and networking opportunities.
+            Today, CU3D has grown into a vibrant community, hosting workshops, guest lectures, and collaborative projects. We partner with companies like Prusa Research and 3Dconnexion, as well as university departments to provide members with real-world experience and networking opportunities.
           </motion.p>
         </motion.div>
 
