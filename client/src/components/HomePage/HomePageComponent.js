@@ -9,6 +9,7 @@
 import EventsGrid from "./EventsGrid";
 import InstagramGrid from "./InstagramGrid";
 import AnnouncementBar from "./AnnouncementBar";
+import Sponsors from "./Sponsors";
 
   function Homepage() {
     const [goldMode, setGoldMode] = useState(false);
@@ -28,7 +29,9 @@ import AnnouncementBar from "./AnnouncementBar";
         <AnimatedCube className = "fixed top-0"/>  {/* Add the animated cube */}
 
         <Mountains /> 
+        
         <EventsGrid/>
+        <Sponsors />
         <InstagramGrid/>
         <ContentSection />
         <AnnouncementBar/>
