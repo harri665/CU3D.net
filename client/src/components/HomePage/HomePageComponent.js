@@ -34,7 +34,7 @@ import Sponsors from "./Sponsors";
         <Sponsors />
         <InstagramGrid/>
         <ContentSection />
-        <AnnouncementBar/>
+        {/* <AnnouncementBar/> */}
       </div>
     );
   }
