@@ -4,8 +4,8 @@ import React from 'react';
 
 const sponsors = [
   { name: 'The Atlas Institute', logo: "/img/ATLAS.gif", link: 'https://www.colorado.edu/' },
-  { name: 'Prusa', logo: "/img/PRUSA.png", link: 'https://www.prusa3d.com/' },
-  { name: 'Space Mouse', logo: "/img/3DCONNECTION.png", link: 'https://3dconnexion.com/' },
+  { name: 'Prusa Research', logo: "/img/PRUSA.png", link: 'https://www.prusa3d.com/' },
+  { name: '3Dconnexion', logo: "/img/3DCONNECTION.png", link: 'https://3dconnexion.com/' },
 ];
 
 const Sponsors = () => {
