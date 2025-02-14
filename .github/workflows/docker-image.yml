@@ -19,7 +19,7 @@ jobs:
       - name: Update proxy in package.json
         run: |
           sed -i 's|"proxy": "http://localhost:3001"|"proxy": "http://backend:3001"|' ./client/package.json
-
+      # comment just to get this to be a commit
       # Commit the changes if any
       - name: Commit proxy change
         run: |
