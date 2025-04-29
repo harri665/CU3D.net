@@ -18,7 +18,7 @@ server.use(routes); // Use existing routes
 server.use('/api', routes);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mst', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://truenas/mst', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,

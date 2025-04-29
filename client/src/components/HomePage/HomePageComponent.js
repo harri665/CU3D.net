@@ -32,7 +32,7 @@ import Sponsors from "./Sponsors";
         
         <EventsGrid/>
         <Sponsors />
-        <InstagramGrid/>
+        {/* <InstagramGrid/> */}
         <ContentSection />
         {/* <AnnouncementBar/> */}
       </div>
