@@ -8,7 +8,7 @@ router.post('/send-or-edit-message', async (req, res) => {
   try {
     // Use the sendOrEditDiscordMessage function to either send or edit a message
     const result = await sendOrEditDiscordMessage(
-      channelId || process.env.CHANNEL_ID, // Use the provided channelId or default one
+      channelId || process.env.DISCORD_CHANNEL_ID, // Use the provided channelId or default one
       messageId,
       content,
       embeds,
@@ -33,7 +33,7 @@ router.post('/contact', async (req, res) => {
   try {
     // Use the sendOrEditDiscordMessage function to either send or edit a message
     const result = await sendOrEditDiscordMessage(
-      '509513851994374149', // Use the provided channelId or default one
+      process.env.DISCORD_CHANNEL_ID || '509513851994374149', // Use environment variable or default
       null,
       discordMessage,
       null,

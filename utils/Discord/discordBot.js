@@ -16,8 +16,15 @@ const client = new Client({
   ],
 });
 
-// Discord login
-client.login("MTI4MzIxOTI0MDg5MTE5MTM1Nw.GzA-Tf.DiasUefxkSqBfWd7BZ_RfLf814vFKThCgfEksA");
+// Discord login using environment variable
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+if (DISCORD_TOKEN) {
+  client.login(DISCORD_TOKEN).catch(error => {
+    console.error('Failed to login to Discord:', error.message);
+  });
+} else {
+  console.warn('DISCORD_TOKEN not found in environment variables. Discord bot will not start.');
+}
 
 /**
  * Function to sync a single Discord event with MongoDB.
@@ -161,7 +168,7 @@ async function sendOrEditDiscordMessage(channelId, messageId, content, embeds, c
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
-  const guildId = '1215926213839945778'; // Replace with your guild ID
+  const guildId = process.env.DISCORD_GUILD_ID || '1215926213839945778';
   fetchAndSyncScheduledEvents(guildId);
 });
 
