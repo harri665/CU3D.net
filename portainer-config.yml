@@ -1,0 +1,33 @@
+# Portainer Stack Configuration
+# This file contains the configuration for deploying CU3D via Portainer
+
+stack_name: cu3d-app
+compose_file: docker-compose.yml
+env_file: .env
+
+# Portainer Deployment Notes:
+# 1. Repository URL: https://github.com/harri665/CU3D.net
+# 2. Compose file path: docker-compose.yml
+# 3. Environment variables file: .env
+# 4. Auto-update: Enable for automatic deployments on git push
+
+# Required Environment Variables for Production:
+# - Set MONGO_PASSWORD to a secure password
+# - Update FRONTEND_DOMAIN and BACKEND_DOMAIN
+# - Add valid DISCORD_TOKEN if using Discord integration
+# - Configure reverse proxy domains if needed
+
+# Volume Persistence:
+# - mongodb_data: Persists MongoDB data
+# - mongodb_config: Persists MongoDB configuration
+
+# Network:
+# - cu3d-network: Internal network for service communication
+
+# Health Checks:
+# - Backend: HTTP health check on /api/health
+# - MongoDB: MongoDB ping command
+
+# Auto-scaling:
+# - Services are configured with restart: unless-stopped
+# - Health checks ensure service reliability

@@ -1,0 +1,42 @@
+# Docker Compose Override for Development
+# This file is automatically loaded by docker-compose
+# Use: docker-compose up (includes both docker-compose.yml and this file)
+
+version: '3.8'
+
+services:
+  # Development overrides for backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://root:example@mongo:27017/mst?authSource=admin
+    command: npm run start:server
+
+  # Development overrides for frontend
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
+
+  # Development MongoDB - no auth for easier development
+  mongo:
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    ports:
+      - "27017:27017"
+    command: mongod --auth

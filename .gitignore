@@ -120,6 +120,30 @@ typings/
 .env
 .env.test
 .env*.local
+.env.production
+
+# Portainer specific
+portainer-data/
+portainer-volumes/
+
+# Docker specific
+docker-compose.override.yml
+.dockerignore
+
+# SSL certificates
+nginx/ssl/
+*.pem
+*.key
+*.crt
+
+# Backup files
+*.backup
+backup/
+dumps/
+
+# Production secrets
+secrets/
+.secrets
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

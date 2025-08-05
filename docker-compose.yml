@@ -1,38 +1,105 @@
 version: '3.8'
 
 services:
-  backend:
-    image: harri665/mern-backend
-    ports:
-      - '3001:3001'
-    environment:
-      - MONGODB_URI=mongodb://root:example@mongo:27017/mst?authSource=admin
-      - NODE_ENV=production
-    depends_on:
-      - mongo
-    networks:
-      - app-network
-    command: sh -c "sleep 10 && npm start" # Delay to ensure MongoDB is ready
-
+  # Frontend Service
   frontend:
-    image: harri665/mern-frontend
+    image: harri665/mern-frontend:latest
+    container_name: cu3d-frontend
     ports:
-      - '3000:3000'
+      - "${FRONTEND_PORT:-3000}:3000"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-production}
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:3001}
+    depends_on:
+      backend:
+        condition: service_healthy
     networks:
-      - app-network
+      - cu3d-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cu3d-frontend.rule=Host(`${FRONTEND_DOMAIN:-localhost}`)"
+      - "traefik.http.services.cu3d-frontend.loadbalancer.server.port=3000"
 
-  mongo:
-    image: mongo:4.4
+  # Backend Service
+  backend:
+    image: harri665/mern-backend:latest
+    container_name: cu3d-backend
     ports:
-      - '27017:27017'
+      - "${BACKEND_PORT:-3001}:3001"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGODB_URI=mongodb://${MONGO_USERNAME:-root}:${MONGO_PASSWORD:-example}@mongo:27017/${MONGO_DATABASE:-mst}?authSource=admin
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=3001
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
+      - DISCORD_CHANNEL_ID=${DISCORD_CHANNEL_ID}
+    depends_on:
+      mongo:
+        condition: service_healthy
     networks:
-      - app-network
+      - cu3d-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cu3d-backend.rule=Host(`${BACKEND_DOMAIN:-localhost}`) && PathPrefix(`/api`)"
+      - "traefik.http.services.cu3d-backend.loadbalancer.server.port=3001"
+
+  # MongoDB Service
+  mongo:
+    image: mongo:${MONGO_VERSION:-4.4}
+    container_name: cu3d-mongodb
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME:-root}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD:-example}
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE:-mst}
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./Scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - cu3d-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    command: mongod --auth
+
+  # Optional: Nginx Reverse Proxy (uncomment if needed)
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: cu3d-nginx
+  #   ports:
+  #     - "${NGINX_PORT:-80}:80"
+  #     - "${NGINX_SSL_PORT:-443}:443"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./nginx/ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - frontend
+  #     - backend
+  #   networks:
+  #     - cu3d-network
+  #   restart: unless-stopped
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
 
 networks:
-  app-network:
+  cu3d-network:
     driver: bridge
+    name: cu3d-network

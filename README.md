@@ -1,24 +1,22 @@
-# BUID 
-#IMPORTANT 
+# CU3D Web Application
 
-** Make sure to change the proxy in ./client/package.json from **
-``
-"proxy": "http://localhost:3001",
-``
-to 
-``
-"proxy": "http://backend:3001",
-``
+Welcome to the CU3D (University 3D Printing Club) web application! This is a full-stack MERN application for managing events, announcements, and 3D printing resources.
 
-### this script will build the docker image and post it to docker hub
-> this will update the server too ... 
-```
+## 🚀 Quick Deployment with Portainer
 
-# Build backend image
-docker build -t harri665/mern-backend .
+For production deployment using Portainer's Git repository feature, see [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
 
-# Build frontend image
-docker build -t harri665/mern-frontend ./client
+### Portainer Quick Start:
+1. **Repository URL**: `https://github.com/harri665/CU3D.net`
+2. **Compose File**: `docker-compose.yml`
+3. **Environment File**: `.env`
+
+## 🏗️ Development Setup
+
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB (local installation or Docker)
+- Docker Desktop (recommended)
 
 # Push backend image to Docker Hub
 docker push harri665/mern-backend

@@ -2,11 +2,8 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-// MongoDB connection setup
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mst', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Note: MongoDB connection is handled in server.js
+// No need to connect again here to avoid duplicate connection errors
 
 const Event = require('../../models/Event'); // Ensure your Event model includes 'discordEventId'
 
