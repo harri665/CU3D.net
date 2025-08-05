@@ -8,22 +8,34 @@ require('dotenv').config();
 const Event = require('../../models/Event'); // Ensure your Event model includes 'discordEventId'
 
 // Initialize Discord bot
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-  ],
-});
+let client = null;
+let discordEnabled = false;
 
 // Discord login using environment variable
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-if (DISCORD_TOKEN) {
-  client.login(DISCORD_TOKEN).catch(error => {
-    console.error('Failed to login to Discord:', error.message);
+
+if (DISCORD_TOKEN && DISCORD_TOKEN !== 'your_discord_token_here' && DISCORD_TOKEN !== 'disabled') {
+  client = new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
   });
+
+  client.login(DISCORD_TOKEN)
+    .then(() => {
+      discordEnabled = true;
+      console.log('Discord bot connected successfully');
+    })
+    .catch(error => {
+      console.warn('Failed to login to Discord:', error.message);
+      console.warn('Discord features will be disabled. Please check your DISCORD_TOKEN.');
+      client = null;
+      discordEnabled = false;
+    });
 } else {
-  console.warn('DISCORD_TOKEN not found in environment variables. Discord bot will not start.');
+  console.warn('DISCORD_TOKEN not found or invalid in environment variables. Discord bot will not start.');
 }
 
 /**
@@ -72,6 +84,11 @@ async function syncEventWithDatabase(discordEvent) {
  * @param {string} guildId - The ID of the guild to fetch scheduled events from.
  */
 async function fetchAndSyncScheduledEvents(guildId) {
+  if (!client || !discordEnabled) {
+    console.warn('Discord client not available. Skipping event sync.');
+    return;
+  }
+
   try {
     const guild = await client.guilds.fetch(guildId);
 
@@ -108,35 +125,42 @@ async function fetchAndSyncScheduledEvents(guildId) {
 /**
  * Event listener for when a guild scheduled event is created.
  */
-client.on('guildScheduledEventCreate', (event) => {
-  console.log(`Scheduled event created: ${event.name}`);
-  syncEventWithDatabase(event); // Sync new event with MongoDB
-});
+if (client) {
+  client.on('guildScheduledEventCreate', (event) => {
+    console.log(`Scheduled event created: ${event.name}`);
+    syncEventWithDatabase(event); // Sync new event with MongoDB
+  });
 
-/**
- * Event listener for when a guild scheduled event is updated.
- */
-client.on('guildScheduledEventUpdate', (oldEvent, newEvent) => {
-  console.log(`Scheduled event updated: ${oldEvent.name} -> ${newEvent.name}`);
-  syncEventWithDatabase(newEvent); // Sync updated event with MongoDB
-});
+  /**
+   * Event listener for when a guild scheduled event is updated.
+   */
+  client.on('guildScheduledEventUpdate', (oldEvent, newEvent) => {
+    console.log(`Scheduled event updated: ${oldEvent.name} -> ${newEvent.name}`);
+    syncEventWithDatabase(newEvent); // Sync updated event with MongoDB
+  });
 
-/**
- * Event listener for when a guild scheduled event is deleted.
- */
-client.on('guildScheduledEventDelete', async (event) => {
-  console.log(`Scheduled event deleted: ${event.name}`);
-  // Remove the event from MongoDB
-  try {
-    await Event.deleteOne({ discordEventId: event.id });
-    console.log(`Event deleted from MongoDB: ${event.name}`);
-  } catch (error) {
-    console.error('Error deleting event from MongoDB:', error);
-  }
-});
+  /**
+   * Event listener for when a guild scheduled event is deleted.
+   */
+  client.on('guildScheduledEventDelete', async (event) => {
+    console.log(`Scheduled event deleted: ${event.name}`);
+    // Remove the event from MongoDB
+    try {
+      await Event.deleteOne({ discordEventId: event.id });
+      console.log(`Event deleted from MongoDB: ${event.name}`);
+    } catch (error) {
+      console.error('Error deleting event from MongoDB:', error);
+    }
+  });
+}
 
 
 async function sendOrEditDiscordMessage(channelId, messageId, content, embeds, components) {
+  if (!client || !discordEnabled) {
+    console.warn('Discord client not available. Cannot send message.');
+    throw new Error('Discord client not available');
+  }
+
   try {
     // Fetch the channel
     const channel = await client.channels.fetch(channelId);
@@ -165,11 +189,14 @@ async function sendOrEditDiscordMessage(channelId, messageId, content, embeds, c
 }
 
 // Start synchronization when the bot is ready
-client.once('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+if (client) {
+  client.once('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+    discordEnabled = true;
 
-  const guildId = process.env.DISCORD_GUILD_ID || '1215926213839945778';
-  fetchAndSyncScheduledEvents(guildId);
-});
+    const guildId = process.env.DISCORD_GUILD_ID || '1215926213839945778';
+    fetchAndSyncScheduledEvents(guildId);
+  });
+}
 
 module.exports = { syncEventWithDatabase, sendOrEditDiscordMessage };
