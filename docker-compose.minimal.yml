@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Backend Service
+  backend:
+    image: harri665/mern-backend:latest
+    container_name: cu3d-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGODB_URI=mongodb://root:example@mongo:27017/mst?authSource=admin
+      - NODE_ENV=production
+      - PORT=3001
+      - DISCORD_TOKEN=disabled
+    depends_on:
+      - mongo
+    networks:
+      - cu3d-network
+    restart: unless-stopped
+
+  # Frontend Service
+  frontend:
+    image: harri665/mern-frontend:latest
+    container_name: cu3d-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    networks:
+      - cu3d-network
+    restart: unless-stopped
+
+  # MongoDB Service
+  mongo:
+    image: mongo:4.4
+    container_name: cu3d-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_DATABASE=mst
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - cu3d-network
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  cu3d-network:
+    driver: bridge

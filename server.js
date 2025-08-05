@@ -14,26 +14,33 @@ if (process.env.NODE_ENV === 'production') {
   server.use(express.static('client/build'));
 }
 
-server.use(routes); // Use existing routes
-server.use('/api', routes);
-
-// Health check endpoint for Docker/Portainer
+// Health check endpoint for Docker/Portainer (define before other routes)
 server.get('/api/health', (req, res) => {
   const healthcheck = {
     uptime: process.uptime(),
     message: 'CU3D Backend is healthy',
     timestamp: Date.now(),
     environment: process.env.NODE_ENV || 'development',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    status: 'ok'
   };
   
   try {
     res.status(200).json(healthcheck);
   } catch (error) {
     healthcheck.message = 'Health check failed';
+    healthcheck.status = 'error';
     res.status(503).json(healthcheck);
   }
 });
+
+// Simple health check without API prefix
+server.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
+server.use(routes); // Use existing routes
+server.use('/api', routes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mst', {
